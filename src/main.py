@@ -1,5 +1,5 @@
 from DiGraph import DiGraph
-#from GraphAlgo import GraphAlgo
+from GraphAlgo import GraphAlgo
 
 
 def check():
@@ -18,9 +18,10 @@ def check():
     (7, 6.806805834715163)
     ([1,3,4,2],3.5)
     """
-    check0()
+    # check0()
     # check1()
     # check2()
+    check3()
 
 
 def check0():
@@ -42,9 +43,9 @@ def check0():
     print(g.get_all_v())  # prints a dict with all the graph's vertices.
     print(g.all_in_edges_of_node(1))
     print(g.all_out_edges_of_node(1))
-    # g_algo = GraphAlgo(g)
-    # print(g_algo.shortest_path(0, 3))
-    # g_algo.plot_graph()
+    g_algo = GraphAlgo(g)
+    print(g_algo.shortest_path(0, 3))
+    g_algo.plot_graph()
 
 
 def check1():
