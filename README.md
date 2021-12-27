@@ -18,6 +18,7 @@ This time we were asked to implement the algorithms in Python.
 The dijkstra algorithm finds the shortest path between two nodes in a DW graph.
 For further reading see: https://en.wikipedia.org/wiki/Dijkstras_algorithm.
 Example of the algorithm:
+
 ![gif](https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Dijkstra_Animation.gif/220px-Dijkstra_Animation.gif)
 
 
