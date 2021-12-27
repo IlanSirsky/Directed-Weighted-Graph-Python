@@ -2,16 +2,17 @@ import json
 import random
 import sys
 from typing import List
-import numpy as np
 import matplotlib.pyplot as plt
 
+import Node
 from DiGraph import DiGraph
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
+
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, graph = DiGraph()):
+    def __init__(self, graph=DiGraph()):
         self._graph = graph
 
     def load_from_json(self, file_name: str) -> bool:
@@ -42,9 +43,9 @@ class GraphAlgo(GraphAlgoInterface):
                 x_val, y_val, z_val = node.getPos()
                 node_dict = {'pos': '{x},{y},{z}'.format(x=x_val, y=y_val, z=z_val), 'id': node.getID()}
                 json_nodes.append(node_dict)
-            for source,dicts in self._graph._inedges.items():
-                for weight,dst in dicts.items():
-                    edge_dict = {'src':source, 'w': weight, 'dest': dst}
+            for source, dicts in self._graph._inedges.items():
+                for weight, dst in dicts.items():
+                    edge_dict = {'src': source, 'w': weight, 'dest': dst}
                     json_edges.append(edge_dict)
             json_dict = {'Edges': json_edges, 'Nodes': json_nodes}
             json_string = json.dumps(json_dict)
@@ -60,7 +61,7 @@ class GraphAlgo(GraphAlgoInterface):
         path = []
         nd = prev[id2]
         while (nd != None and prev[nd.getID()] != None):
-            path.insert(0,nd.getID())
+            path.insert(0, nd.getID())
             nd = prev[nd.getID()]
 
         if nd != None:
@@ -68,7 +69,7 @@ class GraphAlgo(GraphAlgoInterface):
 
         path.append(id2)
 
-        return((dist[id2], path))
+        return ((dist[id2], path))
 
     def DijkstraAlgo(self, src):
         visit = []
@@ -84,48 +85,68 @@ class GraphAlgo(GraphAlgoInterface):
             lowerIndex = 0
             lowerValue = dist[visit[lowerIndex]]
             for i in range(len(visit)):
-                if(lowerValue > dist[visit[i]]):
+                if (lowerValue > dist[visit[i]]):
                     lowerIndex = i
                     lowerValue = dist[visit[i]]
             edges = self._graph.all_out_edges_of_node(visit[lowerIndex])
             for dst, weight in edges.items():
                 alt = dist[visit[lowerIndex]] + weight
-                if(alt < dist[dst]):
+                if (alt < dist[dst]):
                     dist[dst] = alt
                     prev[dst] = self._graph.getNode(visit[lowerIndex])
 
             visit.remove(visit[lowerIndex])
 
-        return prev,dist
+        return prev, dist
 
     def plot_graph(self) -> None:
         for src in self._graph.get_all_v().values():
-            x,y = random.randint(5,25), random.randint(5,25)
+            x, y = random.randint(5, 25), random.randint(5, 25)
             if src.getPos():
-                x, y ,z = src.getPos()
+                x, y = src.getPos()[0] , src.getPos()[1]
             else:
-                src.setPos((x,y))
+                src.setPos((x, y))
 
-            plt.plot(x,y, markersize=10, marker="o", color="blue")
-            plt.text(x,y, str(src.getID()), color="red", fontsize=12)
+            plt.plot(x, y, markersize=10, marker="o", color="blue")
+            plt.text(x, y, str(src.getID()), color="red", fontsize=12)
             for dst in self._graph.all_out_edges_of_node(src.getID()).keys():
 
                 x2, y2 = random.randint(5, 25), random.randint(5, 25)
                 if self._graph.getNode(dst).getPos():
-                    x2, y2, z2 = src.getPos()
+                    x2, y2 = src.getPos()[0] , src.getPos()[1]
                 else:
                     self._graph.getNode(dst).setPos((x2, y2))
 
-                x2, y2, z2 = self._graph.getNode(dst).getPos()
-                plt.annotate("",xy=(x,y), xytext=(x2,y2), arrowprops=dict(arrowstyle="<-"))
+                x2, y2 = self._graph.getNode(dst).getPos()[0] , self._graph.getNode(dst).getPos()[1]
+                plt.annotate("", xy=(x, y), xytext=(x2, y2), arrowprops=dict(arrowstyle="<-"))
         plt.show()
-
 
     def get_graph(self) -> GraphInterface:
         return self._graph
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        super().TSP(node_lst)
+        if not node_lst:
+            return None
+        if not self.isConnected():
+            return None
+        totalWeight = 0
+        salesman =[]
+        start = node_lst[0]
+        salesman.append(start)
+        for node in node_lst:
+            dst = node
+            if dst in salesman:
+                continue
+
+            weight, path = self.shortest_path(start, dst)
+            for j in path:
+                if not j == start:
+                    salesman.append(j)
+                    totalWeight += weight
+
+            start = dst
+
+        return salesman, totalWeight
 
     def centerPoint(self) -> (int, float):
         maxDis = sys.maxsize
@@ -136,13 +157,47 @@ class GraphAlgo(GraphAlgoInterface):
             maxShortPath = 0
             nodes2 = self._graph.get_all_v()
             for dst in nodes2.values():
-                if(dst!=node):
-                    checkPath = self.shortest_path(src,dst.getID())
+                if (dst != node):
+                    checkPath = self.shortest_path(src, dst.getID())
                     dist = checkPath[0]
-                    if(dist > maxShortPath):
+                    if (dist > maxShortPath):
                         maxShortPath = dist
-            if(maxShortPath< maxDis):
+            if (maxShortPath < maxDis):
                 maxDis = maxShortPath
                 nodeKey = src
 
         return (nodeKey, maxDis)
+
+    def DFS(self, node: Node):
+        node.setTag(1)
+        stack = []
+        stack.append(node)
+        while not stack:
+            node = stack[0]
+            stack.pop()
+            for edge in self._graph.all_out_edges_of_node(node.getID()):
+                dest = self._graph.getNode(edge)
+                if dest.getTag() == 0:
+                    stack.append(dest)
+
+    def runDFS(self, graph:DiGraph) -> bool:
+        for node in graph._nodes.values():
+            node.setTag(0)
+        for node in graph._nodes.values():
+            if node.getTag() == 0:
+                self.DFS(node)
+        for node in graph._nodes.values():
+            if node.getTag == 0:
+                return False
+        return True
+
+    def isConnected(self) -> bool:
+        if self._graph.e_size() < self._graph.v_size():
+            return False
+        reverse = DiGraph()
+        for node in self._graph._nodes.values():
+            reverse.add_node(node.getID(), node.getPos())
+        for source, dicts in self._graph._inedges.items():
+            for weight, dst in dicts.items():
+                reverse.add_edge(source, dst, weight)
+        return self.runDFS(self._graph) and self.runDFS(reverse)
