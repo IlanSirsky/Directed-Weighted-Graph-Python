@@ -2,7 +2,7 @@
 **Created by Eldad Tsemach, Ilan Sirisky and Nir Meir**
  
  
-
+## About the Project
 This is task  3 in our OOP course.
 
 It is based on task 2 about Directed Weighted Graphs.
