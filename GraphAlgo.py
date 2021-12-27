@@ -1,3 +1,4 @@
+import json
 import random
 import sys
 from typing import List
@@ -14,10 +15,45 @@ class GraphAlgo(GraphAlgoInterface):
         self._graph = graph
 
     def load_from_json(self, file_name: str) -> bool:
-        pass
+        try:
+            with open(file_name, encoding='utf-8') as f:
+                json_string = f.read()
+            a = json.loads(json_string)
+            new_g = DiGraph()
+            if a.get('Nodes')[0].get('pos') is not None:
+                for node in a.get('Nodes'):
+                    pos = tuple([float(a) for a in node.get('pos').split(",")])
+                    new_g.add_node(node.get('id'), pos)
+            else:
+                for node in a.get('Nodes'):
+                    new_g.add_node(node.get('id'))
+            for edge in a.get('Edges'):
+                new_g.add_edge(edge.get('src'), edge.get('dest'), edge.get('w'))
+            self._graph = new_g
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def save_to_json(self, file_name: str) -> bool:
-        pass
+        try:
+            json_nodes, json_edges = [], []
+            for node in self._graph._nodes.values():
+                x_val, y_val, z_val = node.getPos()
+                node_dict = {'pos': '{x},{y},{z}'.format(x=x_val, y=y_val, z=z_val), 'id': node.getID()}
+                json_nodes.append(node_dict)
+            for source,dicts in self._graph._inedges.items():
+                for weight,dst in dicts.items():
+                    edge_dict = {'src':source, 'w': weight, 'dest': dst}
+                    json_edges.append(edge_dict)
+            json_dict = {'Edges': json_edges, 'Nodes': json_nodes}
+            json_string = json.dumps(json_dict)
+            with open(file_name, "w") as f:
+                f.write(json_string)
+            return True
+        except Exception as e:
+            print(e)
+            return False
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         prev, dist = self.DijkstraAlgo(id1)
@@ -66,7 +102,7 @@ class GraphAlgo(GraphAlgoInterface):
         for src in self._graph.get_all_v().values():
             x,y = random.randint(5,25), random.randint(5,25)
             if src.getPos():
-                x, y = src.getPos()
+                x, y ,z = src.getPos()
             else:
                 src.setPos((x,y))
 
@@ -76,11 +112,11 @@ class GraphAlgo(GraphAlgoInterface):
 
                 x2, y2 = random.randint(5, 25), random.randint(5, 25)
                 if self._graph.getNode(dst).getPos():
-                    x2, y2 = src.getPos()
+                    x2, y2, z2 = src.getPos()
                 else:
                     self._graph.getNode(dst).setPos((x2, y2))
 
-                x2, y2 = self._graph.getNode(dst).getPos()
+                x2, y2, z2 = self._graph.getNode(dst).getPos()
                 plt.annotate("",xy=(x,y), xytext=(x2,y2), arrowprops=dict(arrowstyle="<-"))
         plt.show()
 

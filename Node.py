@@ -1,7 +1,7 @@
 class Node:
     def __init__(self, id:int, pos:tuple):
         self._id = id
-        self._pos = ()
+        self._pos = pos
         self._weight = 0
         self._info = ""
         self._tag = 0
