@@ -56,6 +56,6 @@ Feel free to change/add more tests as you wish.
 ![](https://i.imgur.com/QTyCCNi.png)
 
 ## UML
-![]()
+![](https://i.imgur.com/DjIYCVr.png)
 
 Link to the main assignment: https://github.com/benmoshe/OOP_2021/tree/main/Assignments/Ex3.
