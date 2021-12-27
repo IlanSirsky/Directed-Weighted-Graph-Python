@@ -1,8 +1,12 @@
 # Directed Weighted Graph - Python
 **Created by Eldad Tsemach, Ilan Sirisky and Nir Meir**
  
+ 
+
 This is task  3 in our OOP course.
+
 It is based on task 2 about Directed Weighted Graphs.
+
 This time we were asked to implement the algorithms in Python.
 
 ## List of algorithms
@@ -31,13 +35,17 @@ Example of the algorithm:
 
 
 ## Dependencies
-This project is using Python version 3.9.
+This project is using Python version `3.9`.
+
 We are using Matplotlib in order showcase the graph.
 
 # How to Run
 To run this project, download the files from the github.
+
 Inside the project you can find `main.py`, there you run the any algorithm that you want.
+
 There are 4 checks that are ready that you can run.
+
 Feel free to change/add more tests as you wish. 
 
 ## Input/Output Examples
