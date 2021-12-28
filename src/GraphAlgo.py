@@ -4,8 +4,8 @@ import sys
 from typing import List
 import matplotlib.pyplot as plt
 
-import Node
-from DiGraph import DiGraph
+from src.Node import Node
+from src.DiGraph import DiGraph
 from src import GraphInterface
 from src.GraphAlgoInterface import GraphAlgoInterface
 
@@ -14,6 +14,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, graph=DiGraph()):
         self._graph = graph
+        self.get_graph().set_mc(0)
 
     def load_from_json(self, file_name: str) -> bool:
         try:

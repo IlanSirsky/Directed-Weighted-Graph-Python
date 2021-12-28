@@ -1,5 +1,5 @@
 from src.GraphInterface import GraphInterface
-from Node import Node
+from src.Node import Node
 
 
 class DiGraph(GraphInterface):
@@ -25,6 +25,9 @@ class DiGraph(GraphInterface):
     def get_mc(self) -> int:
         return self._mc
 
+    def set_mc(self, mc):
+        self._mc = mc
+
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
         if id1 not in self._outedges.keys() or id2 not in self._inedges.keys():
             return False
@@ -35,6 +38,7 @@ class DiGraph(GraphInterface):
         self._outedges[id1][id2] = weight
         self._inedges[id2][id1] = weight
         self.__edgesCounter_ += 1
+        self._mc +=1
 
         return True
 
@@ -49,6 +53,9 @@ class DiGraph(GraphInterface):
         self._outedges[node_id] = {}
 
         self.__nodesCounter_ += 1
+        self._mc +=1
+
+
 
         return True
 
@@ -67,6 +74,7 @@ class DiGraph(GraphInterface):
 
         self._outedges.__delitem__(node_id)
         self._inedges.__delitem__(node_id)
+        self._mc +=1
 
         return True
 
@@ -81,6 +89,7 @@ class DiGraph(GraphInterface):
         self._inedges[node_id2].__delitem__(node_id1)
 
         self.__edgesCounter_ -= 1
+        self._mc +=1
 
         return True
 
