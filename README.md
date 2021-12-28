@@ -61,7 +61,7 @@ Feel free to change/add more tests as you wish.
 
 ## Input/Output Examples <a name="examples"></a>
 ### Example for A1.json input :
-![Building](https://i.imgur.com/Xl0jAQl.png)| ![](https://i.imgur.com/xZjCTM0.png)
+![Building](https://i.imgur.com/lrdPLgw.png)| ![](https://i.imgur.com/kuF2Q7q.png)
 ##### In Edges :
 - *src* : the ID of the source node.
 - *w* : the weight of the edge.
