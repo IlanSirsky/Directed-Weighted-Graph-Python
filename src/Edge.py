@@ -7,6 +7,7 @@ class Edge:
         self._info = ""
         self._tag = 0
 
+    # getters and setters
     def getSrc(self):
         return self._src
 

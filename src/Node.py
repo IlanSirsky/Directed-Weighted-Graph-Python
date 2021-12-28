@@ -6,6 +6,7 @@ class Node:
         self._info = ""
         self._tag = 0
 
+    # getter and setter
     def getID(self):
         return self._id
 
